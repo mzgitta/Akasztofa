@@ -1,0 +1,109 @@
+using System;
+
+class O7W3TT_Akasztofa
+{
+    static void Main()
+    {
+        string wordToGuess = "vacation";
+        char[] guessedWord = new string('_', wordToGuess.Length).ToCharArray();
+        string guessedLetters = "";
+
+        int attempts = 0;
+        int maxAttempts = wordToGuess.Length;
+
+        // Üdvözlő üzenet és kezdeti szöveg
+        Console.WriteLine("Üdvözöllek az Akasztófa játékban!");
+        Console.WriteLine("Egy angol szót keresünk. Kezdjük!");
+
+        while (attempts < maxAttempts)
+        {
+            // Megjelenítés a kitalálandó szóból és maradék próbálkozási lehetőségek
+            Console.WriteLine("\n" + string.Join(" ", guessedWord));
+            Console.WriteLine($"\nMég {maxAttempts - attempts} próbálkozási lehetőséged maradt.");
+
+            char guessedLetter = ' ';
+            bool validInput = false;
+
+            // Betű bekérés és ellenőrzés
+            do
+            {
+                Console.Write("\nKérlek írj be egy betűt: ");
+                string input = Console.ReadLine().ToLower();
+
+                if (input.Length == 1 && char.IsLetter(input[0]) && (input[0] >= 'a' && input[0] <= 'z'))
+                {
+                    guessedLetter = input[0];
+
+                    if (guessedLetters.Contains(guessedLetter))
+                    {
+                        Console.WriteLine("\nEzt a betűt már próbáltad. Kérlek adj meg egy másikat.");
+                    }
+                    else
+                    {
+                        guessedLetters += guessedLetter + " ";
+                        validInput = true;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("\nÉrvénytelen bemenet. Kérlek az angol ABC betűit használd!");
+                }
+            } while (!validInput);
+
+            bool found = false;
+            for (int i = 0; i < wordToGuess.Length; i++)
+            {
+                // Betű ellenőrzése a kitalálandó szóban
+                if (wordToGuess[i] == guessedLetter)
+                {
+                    guessedWord[i] = guessedLetter;
+                    found = true;
+                }
+            }
+
+            if (!found)
+            {
+                // Ha a betű nem található a szóban
+                Console.WriteLine($"\nEz a betű '{guessedLetter}' nincs benne a szóban.");
+
+                // Segítség kérés és kezelése
+                Console.Write("Kérsz segítséget? (Y/N): ");
+                char help = Console.ReadLine().ToUpper()[0];
+
+                if (help == 'Y')
+                {
+                    // Segítség megadása
+                    for (int i = 0; i < wordToGuess.Length; i++)
+                    {
+                        if (guessedWord[i] == '_')
+                        {
+                            guessedWord[i] = wordToGuess[i];
+                            break;
+                        }
+                    }
+                }
+
+                if (help != 'Y' && help != 'N')
+                {
+                    // Érvénytelen segítség kérés kezelése
+                    Console.WriteLine("\nKérlek adj meg egy betűt.");
+                }
+
+                attempts++;
+            }
+
+            if (string.Join("", guessedWord) == wordToGuess)
+            {
+                // Ha sikerült kitalálni a szót
+                Console.WriteLine($"\nGratulálok! Kitaláltad a szót, ami a: {wordToGuess} volt");
+                break;
+            }
+        }
+
+        if (attempts == maxAttempts)
+        {
+            // Ha elfogytak a próbálkozási lehetőségek
+            Console.WriteLine("\nKifogytál a lehetőségekből. A keresett szó a: gaming");
+        }
+    }
+}
